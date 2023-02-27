@@ -1,0 +1,22 @@
+{
+  "name": "pokedex",
+  "version": "1.0.0",
+  "description": "Segunda tarea de la clase 12 de r/Argentina-Programa",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juansebayala/pokedex.git"
+  },
+  "author": "Juan Sebastián Ayala",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Juansebayala/pokedex/issues"
+  },
+  "homepage": "https://github.com/Juansebayala/pokedex#readme",
+  "dependencies": {
+    "bootstrap": "^5.2.3"
+  }
+}
