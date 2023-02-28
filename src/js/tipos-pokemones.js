@@ -1,27 +1,46 @@
 let tipoPokemon;
 
-const $tiposPokemones = document.querySelector(".tipos-pokemones");
-$tiposPokemones.onclick = (e) => {
+setTimeout(() => {
+  eventoTiposPokemones();
+}, 3000);
+
+function eventoTiposPokemones() {
+  const $tiposPokemones = document.querySelector(".tipos-pokemones");
+  $tiposPokemones.onclick = manejarEventoTiposPokemones;
+}
+
+function manejarEventoTiposPokemones(e) {
   const $elementoSeleccionado = e.target;
   if (
     $elementoSeleccionado.classList.contains("nav-item") &&
     !$elementoSeleccionado.classList.contains("todos-los-pokemones")
   ) {
+    desabilitarTemporalmenteBotonesTipo();
+    eliminarTarjetasAnteriores();
+    mostrarAnimacionCarga();
     pokemonAMostrar = 1;
     limitePokemonesAMostrar = 20;
     tipoPokemon = $elementoSeleccionado.textContent.toLowerCase();
-    eliminarTarjetasAnteriores();
-    mostrarAnimacionCarga();
+    ocultarMensajeError();
     obtenerListaPokemones(tipoPokemon);
     mostrarBotonCargarMasPokemonesPorTipo();
     ocultarBotonCargarMasPokemones();
   }
-};
+}
+
+function desabilitarTemporalmenteBotonesTipo() {
+  const $tiposPokemones = document.querySelector(".tipos-pokemones");
+  $tiposPokemones.onclick = null;
+  setTimeout(() => {
+    $tiposPokemones.onclick = manejarEventoTiposPokemones;
+  }, 2500)
+}
 
 const $botonCargarMasPokemonesPorTipo = document.querySelector(
   "#cargar-mas-pokemones-por-tipo"
 );
 $botonCargarMasPokemonesPorTipo.onclick = () => {
+  ocultarMensajeError();
   obtenerListaPokemones(tipoPokemon);
 };
 
@@ -31,14 +50,16 @@ function obtenerListaPokemones(tipoPokemon) {
       if (respuesta.ok) {
         return respuesta.json();
       }
-      throw new Error("No se pudo encontrar el Pokemon");
+      throw new Error();
     })
     .then((pokemones) => {
       const listaPokemones = pokemones.pokemon;
       mostrarPokemonesPorTipo(listaPokemones);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      mostrarMensajeError();
+      ocultarAnimacionCarga();
+      eliminarTarjetasAnteriores();
     });
 }
 
@@ -58,13 +79,17 @@ function mostrarPokemonesPorTipo(listaPokemones) {
         if (respuesta.ok) {
           return respuesta.json();
         }
-        throw new Error("No se pudo encontrar el Pokemon");
+        throw new Error();
       })
       .then((pokemon) => {
         crearTarjetaPokemon(pokemon);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(() => {
+        mostrarMensajeError();
+        ocultarAnimacionCarga();
+        eliminarTarjetasAnteriores();
+        pokemonAMostrar = 1;
+        limitePokemonesAMostrar = 20;
       });
   }
   limitePokemonesAMostrar += 20;
